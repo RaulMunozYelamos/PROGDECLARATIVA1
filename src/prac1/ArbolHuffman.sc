@@ -56,6 +56,7 @@ trait ArbolHuffman {
 
 
 
+
     def codificar(cadena:String): List[Int] = {
       codificarB(cadenaAListChars(cadena), List())
     }
@@ -65,6 +66,7 @@ trait ArbolHuffman {
       case RamaHuff(nodoizq,nododch) if nododch.buscarcaracter(listchar.head)=> nododch.codificarB(listchar, List(1):::listaBits)
       case HojaHuff(caracter, pesoHoja) if this.buscarcaracter(listchar.head) => listaBits ///recursividad con la cola para buscar el resto de caracteres
     }
+
 
 }
 
