@@ -61,10 +61,10 @@ trait ArbolHuffman {
       codificarB(cadenaAListChars(cadena), List())
     }
 
-    def codificarB(listchar:List[Char], listaBits:List[Int]):List[Int] = this match {
-      case RamaHuff(nodoizq,nododch) if nodoizq.buscarcaracter(listchar.head)=> nodoizq.codificarB(listchar, List(0):::listaBits)
-      case RamaHuff(nodoizq,nododch) if nododch.buscarcaracter(listchar.head)=> nododch.codificarB(listchar, List(1):::listaBits)
-      case HojaHuff(caracter, pesoHoja) if this.buscarcaracter(listchar.head) => listaBits ///recursividad con la cola para buscar el resto de caracteres
+    def codificarB(char:Char, listaBits:List[Int]):List[Int] = this match {
+      case RamaHuff(nodoizq,nododch) if nodoizq.buscarcaracter(char)=> nodoizq.codificarB(char, List(0):::listaBits)
+      case RamaHuff(nodoizq,nododch) if nododch.buscarcaracter(char)=> nododch.codificarB(char, List(1):::listaBits)
+      case HojaHuff(caracter, pesoHoja) if this.caracter==char => listaBits ///recursividad con la cola para buscar el resto de caracteres
     }
 
 
