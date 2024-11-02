@@ -1,2 +1,2 @@
 trait CodigoHuffman
-
+import Arbo
