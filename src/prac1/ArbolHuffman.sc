@@ -94,7 +94,30 @@ trait ArbolHuffman {
     }
 
     //DistribFrecAListaHojas y sus funciones auxiliares
-    
+
+    def tuplaAHoja(tupla:(Char,Int)):HojaHuff=
+      new HojaHuff(tupla._1, tupla._2)
+
+
+    def DistribFrecAListaHojas(frec:List[(Char, Int)]):List[HojaHuff] = {
+      val frecordenada= frec.sortBy(_._2)
+      frecordenada.map(tuplaAHoja)
+    }
+
+    //Creación del árbol codificado a partir de la lista de hojas
+
+
+
+    def crearRamaHuff(izq:ArbolHuffman, dch: ArbolHuffman): RamaHuff = {
+      new RamaHuff(izq,dch)
+    }
+
+    def combinar(nodos:List[ArbolHuffman]):List[ArbolHuffman] ={
+
+    }
+
+
+
 
   }
 
