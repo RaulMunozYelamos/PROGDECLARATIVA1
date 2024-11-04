@@ -34,12 +34,11 @@ trait ArbolHuffman {
           case head :: tail => listaCharsCadenaAux(tail, head + cadena)
         }
         listaCharsCadenaAux(listaCaracteres, "")
-      }
+    }
 
 
-
-      def decodificar(bits: List[Int], arbol: ArbolHuffman): String = {
-      @tailrec
+    def decodificar(bits: List[Int], arbol: ArbolHuffman): String = {
+    @tailrec
       def decoAux(arbolA: ArbolHuffman, arbolB: ArbolHuffman, bits: List[Int], cadena: String): String = (arbolB, bits) match {
         case (HojaHuff(char, peso), _) => decoAux(arbolA, arbolA, bits, char + cadena)
         case (_, Nil) => cadena
@@ -60,10 +59,10 @@ trait ArbolHuffman {
 
     def codificar(cadena:String): List[Int] = {
       val listaChars= cadenaAListChars(cadena)
-      //listaChars.flatMap(codificarchar())
+      //Opción 1: listaChars.flatMap(char => this.codificarchar(char, List()))
 
-      val listafinal=codificarchar(listaChars.head, List()) :::codificar(listaCharsACadena(listaChars.tail))
-      listafinal
+      //Opción 2: val listafinal=codificarchar(listaChars.head, List()) :::codificar(listaCharsACadena(listaChars.tail))
+      //listafinal
     }
 
 
@@ -78,28 +77,24 @@ trait ArbolHuffman {
 
   def crearArbolHuffman(cadena:String):ArbolHuffman= {
 
-    /*    def contarcaracter(caracter:Char, contador:Int, listaBuscar:List[Char]): Int = listaBuscar match {
+    //ListaCharsADistFrec y sus auxiliares
+    def contarcaracter(caracter:Char, contador:Int, listaBuscar:List[Char]): Int = listaBuscar match {
       case h::Nil if h!=caracter=> contador
       case h::Nil if h==caracter=> contador+1
-      case h::t if h!=caracter=>contarcaracter(caracter, contador, t)
-      case h::t if h==caracter =>contarcaracter(caracter, contador+1, t)
+      case h::t if h!=caracter=> contarcaracter(caracter, contador, t)
+      case h::t if h==caracter => contarcaracter(caracter, contador+1, t)
     }
 
-     */
+    def tuplaCaracter(caracter:Char, listaBuscar:List[Char]): (Char, Int) =
+      (caracter, contarcaracter(caracter, 0, listaBuscar))
 
-    /*
-    def ListaCharsADistFrec(listachar:List[Char]):List[(Char, Int)]= {
-      def auxListaCharADistFrec(listacadena:List[Char]):List[(Char, Int)] = listacadena match{
-        case head::tail => List((head, contarcaracter(head, 0, listacadena))) ::: auxListaCharADistFrec(tail)
-
-
-      }
+    def ListaCharsADistFrec(listachar:List[Char]):List[(Char, Int)]= listachar match {
+      case h::Nil => List(tuplaCaracter(h, listachar))
+      case h::t => List(tuplaCaracter(h,listachar)) ::: ListaCharsADistFrec(t)
     }
 
-     */
-
-
-
+    //DistribFrecAListaHojas y sus funciones auxiliares
+    
 
   }
 
