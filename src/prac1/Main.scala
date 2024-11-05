@@ -1,8 +1,6 @@
 package prac1
-
+import prac1.ArbolHuffman
 
 object Main {
-  def main(args: Array[String]): Unit = {
-    println("Hello world!")
-  }
+
 }

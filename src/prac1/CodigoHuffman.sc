@@ -1,2 +1,0 @@
-trait CodigoHuffman
-import Arbo
