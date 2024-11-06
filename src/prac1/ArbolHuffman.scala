@@ -1,9 +1,10 @@
 package prac1
 
-import scala.List
 import scala.annotation.tailrec
 
 trait ArbolHuffman {
+
+  type TablaCodigos = List[(Char, List[Int])]
 
   def peso(): Int = this match {
     case HojaHuff(caracter, pesoHoja)=> pesoHoja
@@ -48,6 +49,14 @@ trait ArbolHuffman {
     case HojaHuff(caracter, pesoHoja) if caracter==char => listaBits.reverse ///recursividad con la cola para buscar el resto de caracteres
   }
 
+  def deArbolATabla(arbol: ArbolHuffman): TablaCodigos = {
+    def auxArbolTabla(arbol: ArbolHuffman, listaTuplas : TablaCodigos): TablaCodigos = arbol match{
+      case HojaHuff(caracter,pesoHoja) => List((caracter, arbol.codificar(caracter.toString)))
+      case RamaHuff(nodoizq,nododch) => auxArbolTabla(nodoizq, listaTuplas) ++ auxArbolTabla(nododch, listaTuplas)
+    }
+    auxArbolTabla(arbol, List())
+  }
+
 }
 
 
@@ -57,7 +66,7 @@ case class HojaHuff(caracter: Char, pesoHoja: Int) extends ArbolHuffman
 
 
 object ArbolHuffman{
-    def main(args: Array[String]): Unit = {
+  def main(args: Array[String]): Unit = {
       val arbolWiki: ArbolHuffman = RamaHuff( // https://en.wikipedia.org/wiki/File:Huffman_tree_2.svg
         RamaHuff(
           RamaHuff(
@@ -217,9 +226,6 @@ object ArbolHuffman{
 
     apply(cadena)
   }
-
-  //CONSTRUCTOR DEL OBJETO
-
 
 }
 
