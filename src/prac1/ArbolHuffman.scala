@@ -1,5 +1,6 @@
 package prac1
 
+import scala.List
 import scala.annotation.tailrec
 
 trait ArbolHuffman {
@@ -13,12 +14,6 @@ trait ArbolHuffman {
     case RamaHuff(nodoizq, nododch) => nodoizq.caracteres() ::: nododch.caracteres()
     case HojaHuff(caracter, _) => List(caracter)
   }
-
-
-
-
-
-
 
   private def decoAux[A](arbolA: ArbolHuffman, bits: List[A], cadena: String): String = (this, bits) match {
     case (HojaHuff(caracter, pesoHoja), _) => arbolA.decoAux(arbolA, bits, caracter + cadena)
@@ -115,13 +110,33 @@ object ArbolHuffman{
       println(listabits)
       val lista= arbolWiki.decodificar(listabits)
       println(lista)
-      println(ListaCharsADistFrec(cadenaAListChars("22333666666")))
-      println(DistribFrecAListaHojas(ListaCharsADistFrec(cadenaAListChars("22333666666"))))
-      println(combinar(DistribFrecAListaHojas(ListaCharsADistFrec(cadenaAListChars("22333666666")))))
-      println(repetirHasta(combinar,esListaSingleton)(DistribFrecAListaHojas(ListaCharsADistFrec(cadenaAListChars("22333666666")))))
+      println(crearArbolHuffman("1122344521"))
+
+
+
     }
 
-  //def crearArbolHuffman(cadena:String):ArbolHuffman= {
+
+
+  def cadenaAListChars(cadena: String): List[Char] = {
+    cadena.toList
+  }
+
+
+  def listaCharsACadena(listaCaracteres: List[Char]): String = {
+    @tailrec
+    def listaCharsCadenaAux(lista: List[Char], cadena: String): String = lista match {
+      case Nil => cadena.reverse
+      case head :: tail => listaCharsCadenaAux(tail, head + cadena)
+    }
+    listaCharsCadenaAux(listaCaracteres, "")
+  }
+
+
+
+
+
+  def crearArbolHuffman(cadena:String):ArbolHuffman= {
 
     //ListaCharsADistFrec y sus auxiliares
     def contarcaracter(caracter:Char, contador:Int, listaBuscar:List[Char]): Int = listaBuscar match {
@@ -134,32 +149,33 @@ object ArbolHuffman{
     def tuplaCaracter(caracter:Char, listaBuscar:List[Char]): (Char, Int) =
       (caracter, contarcaracter(caracter, 0, listaBuscar))
 
-    def ListaCharsADistFrec(listachar:List[Char]):List[(Char, Int)]= listachar match {
-      case h::Nil => List(tuplaCaracter(h, listachar))
-      case h::t => List(tuplaCaracter(h,listachar)) ::: ListaCharsADistFrec(t)
+    def ListaCharsADistFrec(listachar:List[Char]):List[(Char, Int)]= {
+      def aux(listachar:List[Char],listavacia:List[(Char,Int)]):List[(Char, Int)]=listachar match {
+        case Nil => listavacia.reverse
+        case h::t =>
+          if (listavacia.exists {case(c,int) => c==h}) aux(t,listavacia)
+          else aux(t, List(tuplaCaracter(h, listachar)):::listavacia)
+      }
+      aux(listachar,List())
+
     }
 
     //DistribFrecAListaHojas y sus funciones auxiliares
 
-    private def tuplaAHoja(tupla:(Char,Int)):HojaHuff=
+    def tuplaAHoja(tupla:(Char,Int)):HojaHuff= {
       HojaHuff(tupla._1, tupla._2)
+
+    }
 
 
     def DistribFrecAListaHojas(frec:List[(Char, Int)]):List[HojaHuff] = {
-      val frecordenada= frec.sortBy(_._2)
-      frecordenada.map(tuplaAHoja)
-    }
+        val frecordenada= frec.sortBy(_._2)
+        frecordenada.map(tuplaAHoja)
+      }
 
 
-  def listaCharsACadena(listaCaracteres: List[Char]): String = {
-    @tailrec
-    def listaCharsCadenaAux(lista: List[Char], cadena: String): String = lista match {
-      case Nil => cadena.reverse
-      case head :: tail => listaCharsCadenaAux(tail, head + cadena)
-    }
-    listaCharsCadenaAux(listaCaracteres, "")
-  }
-    //Creación del árbol codificado a partir de la lista de hojas
+
+        //Creación del árbol codificado a partir de la lista de hojas
 
 
 
@@ -177,35 +193,33 @@ object ArbolHuffman{
         case h::t if (rama.peso()<=h.peso()) => rama :: lista
         case h::t if (rama.peso()>h.peso()) => h :: auxCombinar(rama,t )
       }
-    if (nodos.length<1) return Nil
-    if (nodos.length==1) return List(nodos.head)
-    auxCombinar(crearRamaHuff(nodos.head, nodos.tail.head), nodos.tail)
+      if (nodos.length<1) return Nil
+      if (nodos.length==1) return List(nodos.head)
+      auxCombinar(crearRamaHuff(nodos.head, nodos.tail.head), nodos.tail.tail)
     }
 
     def esListaSingleton(lista: List[ArbolHuffman]): Boolean = lista match {
-      case h::t => if (lista.isEmpty) true else false
+      case h::t => if (lista.length.equals(1)) true else false
       case _ => false
     }
 
-  def cadenaAListChars(cadena: String): List[Char] = {
-    cadena.toList
-  }
 
 
-
-
-    //cada vez que queremos utilizarla meter en f la funcion combinar y en g la funcion eslistasingleton
+        //cada vez que queremos utilizarla meter en f la funcion combinar y en g la funcion eslistasingleton
     def repetirHasta(f: List[ArbolHuffman] => List[ArbolHuffman], g: List[ArbolHuffman]=> Boolean)(listaNodos: List[ArbolHuffman]): List[ArbolHuffman] =   {
-      if (g(listaNodos)) return listaNodos
+      if (g(listaNodos)) listaNodos
       else repetirHasta(f,g)(f(listaNodos))
     }
 
+    def apply(cadena: String): ArbolHuffman ={
+      repetirHasta(combinar,esListaSingleton)(DistribFrecAListaHojas(ListaCharsADistFrec(cadenaAListChars(cadena)))).head
+    }
 
-  //}
+    apply(cadena)
+  }
 
   //CONSTRUCTOR DEL OBJETO
 
-  // apply(cadena: String): ArbolHuffman = crearArbolHuffman(cadena)
 
 }
 
