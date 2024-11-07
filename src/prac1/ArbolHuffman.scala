@@ -49,12 +49,13 @@ trait ArbolHuffman {
     case HojaHuff(caracter, pesoHoja) if caracter==char => listaBits.reverse ///recursividad con la cola para buscar el resto de caracteres
   }
 
+
   def deArbolATabla(arbol: ArbolHuffman): TablaCodigos = {
-    def auxArbolTabla(arbol: ArbolHuffman, listaTuplas : TablaCodigos): TablaCodigos = arbol match{
-      case HojaHuff(caracter,pesoHoja) => List((caracter, arbol.codificar(caracter.toString)))
-      case RamaHuff(nodoizq,nododch) => auxArbolTabla(nodoizq, listaTuplas) ++ auxArbolTabla(nododch, listaTuplas)
+    def auxArbolTabla(arbol: ArbolHuffman, arbolOriginal: ArbolHuffman, listaTuplas : TablaCodigos): TablaCodigos = arbol match{
+      case HojaHuff(caracter,pesoHoja) => List((caracter, arbolOriginal.codificar(caracter.toString)))
+      case RamaHuff(nodoizq,nododch) => auxArbolTabla(nodoizq, arbolOriginal ,listaTuplas) ++ auxArbolTabla(nododch, arbolOriginal, listaTuplas)
     }
-    auxArbolTabla(arbol, List())
+    auxArbolTabla(arbol, arbol,List())
   }
 
 }
