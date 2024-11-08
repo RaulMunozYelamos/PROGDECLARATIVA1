@@ -2,9 +2,13 @@ package prac1
 
 import scala.annotation.tailrec
 
+type Bit = 0 | 1
+
 trait ArbolHuffman {
 
   type TablaCodigos = List[(Char, List[Int])]
+
+
 
   def peso(): Int = this match {
     case HojaHuff(caracter, pesoHoja)=> pesoHoja
@@ -58,6 +62,15 @@ trait ArbolHuffman {
     auxArbolTabla(arbol, arbol,List())
   }
 
+  def codificar(arbol: TablaCodigos)(cadena: String): List[Int]= {
+
+  }
+  def decodificar(tabla: TablaCodigos)(lista: List[Int]): String={
+    def decoAux(tabla: TablaCodigos, lista:List[Int], cadena:String): String = lista match
+
+  }
+
+
 }
 
 
@@ -67,66 +80,6 @@ case class HojaHuff(caracter: Char, pesoHoja: Int) extends ArbolHuffman
 
 
 object ArbolHuffman{
-  def main(args: Array[String]): Unit = {
-      val arbolWiki: ArbolHuffman = RamaHuff( // https://en.wikipedia.org/wiki/File:Huffman_tree_2.svg
-        RamaHuff(
-          RamaHuff(
-            HojaHuff(' ', 7),
-            RamaHuff(
-              HojaHuff('a', 4),
-              HojaHuff('e', 4)
-            )
-          ),
-          RamaHuff(
-            RamaHuff(
-              HojaHuff('f', 3),
-              RamaHuff(
-                HojaHuff('h', 2),
-                HojaHuff('i', 2)
-              )
-            ),
-            RamaHuff(
-              HojaHuff('m', 2),
-              HojaHuff('t', 2)
-            )
-          )
-        ),
-        RamaHuff(
-          RamaHuff(
-            RamaHuff(
-              HojaHuff('n', 2),
-              HojaHuff('s', 2)
-            ),
-            RamaHuff(
-              HojaHuff('l', 1),
-              HojaHuff('o', 1)
-            )
-          ),
-          RamaHuff(
-            RamaHuff(
-              HojaHuff('p', 1),
-              HojaHuff('r', 1)
-            ),
-            RamaHuff(
-              HojaHuff('u', 1),
-              HojaHuff('x', 1)
-            )
-          )
-        )
-      )
-      println(arbolWiki.peso())
-      println(arbolWiki.caracteres())
-      val listabits = arbolWiki.codificar("u")
-      println(listabits)
-      val lista= arbolWiki.decodificar(listabits)
-      println(lista)
-      println(crearArbolHuffman("1122344521"))
-
-
-
-    }
-
-
 
   def cadenaAListChars(cadena: String): List[Char] = {
     cadena.toList
@@ -228,13 +181,72 @@ object ArbolHuffman{
     apply(cadena)
   }
 
+  def main(args: Array[String]): Unit = {
+    val arbolWiki: ArbolHuffman = RamaHuff( // https://en.wikipedia.org/wiki/File:Huffman_tree_2.svg
+      RamaHuff(
+        RamaHuff(
+          HojaHuff(' ', 7),
+          RamaHuff(
+            HojaHuff('a', 4),
+            HojaHuff('e', 4)
+          )
+        ),
+        RamaHuff(
+          RamaHuff(
+            HojaHuff('f', 3),
+            RamaHuff(
+              HojaHuff('h', 2),
+              HojaHuff('i', 2)
+            )
+          ),
+          RamaHuff(
+            HojaHuff('m', 2),
+            HojaHuff('t', 2)
+          )
+        )
+      ),
+      RamaHuff(
+        RamaHuff(
+          RamaHuff(
+            HojaHuff('n', 2),
+            HojaHuff('s', 2)
+          ),
+          RamaHuff(
+            HojaHuff('l', 1),
+            HojaHuff('o', 1)
+          )
+        ),
+        RamaHuff(
+          RamaHuff(
+            HojaHuff('p', 1),
+            HojaHuff('r', 1)
+          ),
+          RamaHuff(
+            HojaHuff('u', 1),
+            HojaHuff('x', 1)
+          )
+        )
+      )
+    )
+    println(arbolWiki.peso())
+    println(arbolWiki.caracteres())
+    val listabits = arbolWiki.codificar("u")
+    println(listabits)
+    val lista= arbolWiki.decodificar(listabits)
+    println(lista)
+    println(crearArbolHuffman("1122344521"))
+
+
+
+  }
 }
 
 
 
 
-// Pregunta 1 --> Estructura, que hay que entregar, si hay q poner abstract class
+// Pregunta 1 --> Estructura, que hay que entregar
 // Pregunta 2 --> Que es el apply, donde se pone y pa que sirve
+// Pregunta 3 --> Type bit
 
 
 
